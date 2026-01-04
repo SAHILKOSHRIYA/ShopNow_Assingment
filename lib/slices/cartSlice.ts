@@ -1,12 +1,11 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 
 export type CartItem = {
-  productId: number; // Changed from 'id' to match requirements
-  name: string; // Changed from 'title' to match requirements
+  productId: number; 
+  name: string; 
   price: number;
   quantity: number;
-  imageUrl: string; // Changed from 'image' to match requirements
-  // Keep backward compatibility
+  imageUrl: string; 
   id?: number;
   title?: string;
   image?: string;
@@ -38,7 +37,7 @@ const cartSlice = createSlice({
       state.items = action.payload;
     },
     addToCart(state, action: PayloadAction<Omit<CartItem, "quantity">>) {
-      // Support both old and new field names for compatibility
+     
       const productId = action.payload.productId ?? action.payload.id!;
       const existing = state.items.find(
         (i) => i.productId === productId || i.id === productId

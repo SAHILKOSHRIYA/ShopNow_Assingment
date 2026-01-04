@@ -1,17 +1,17 @@
 export type Product = {
   id: number;
   title: string;
-  name?: string; // Alias for title
+  name?: string; 
   price: number;
   description: string;
   category: string;
   image: string;
-  imageUrl?: string; // Alias for image
+  imageUrl?: string; 
   rating?: {
     rate: number;
     count: number;
   };
-  ratingValue?: number; // Direct rating value (0-5)
+  ratingValue?: number;
   reviewCount?: number;
   availableStock?: number;
 };
@@ -24,7 +24,7 @@ export async function fetchProducts(): Promise<Product[]> {
     throw new Error("Failed to fetch products");
   }
   const products = await res.json();
-  // Map API response to our Product type with rating/review data
+  
   return products.map((p: any) => ({
     ...p,
     name: p.title,
@@ -41,14 +41,14 @@ export async function fetchProduct(id: string | number): Promise<Product> {
     throw new Error("Failed to fetch product");
   }
   const product = await res.json();
-  // Map API response to our Product type with rating/review data
+  
   return {
     ...product,
     name: product.title,
     imageUrl: product.image,
     ratingValue: product.rating?.rate ?? 0,
     reviewCount: product.rating?.count ?? 0,
-    availableStock: Math.floor(Math.random() * 50) + 1, // Mock stock for demo
+    availableStock: Math.floor(Math.random() * 50) + 1, 
   };
 }
 

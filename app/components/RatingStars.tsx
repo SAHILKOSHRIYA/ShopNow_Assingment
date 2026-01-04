@@ -63,8 +63,8 @@ export function RatingStars({ rating, reviewCount, size = "md" }: Props) {
         ))}
       </div>
       {reviewCount !== undefined && (
-        <span className="ml-1 text-xs text-zinc-600 dark:text-zinc-400">
-          {reviewCount}
+        <span className="ml-1 text-xs text-[#007185] hover:text-[#C7511F] hover:underline cursor-pointer">
+          ({reviewCount})
         </span>
       )}
     </div>

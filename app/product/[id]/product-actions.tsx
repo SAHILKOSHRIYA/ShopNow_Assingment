@@ -29,9 +29,9 @@ export function ProductDetailActions({ product }: { product: Product }) {
     <div className="mt-4 flex flex-wrap items-center gap-3">
       <button
         onClick={handleAdd}
-        className="inline-flex items-center justify-center rounded-full bg-emerald-600 px-6 py-2 text-sm font-medium text-white shadow-sm transition hover:bg-emerald-700 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-emerald-500 focus-visible:ring-offset-2 dark:ring-offset-zinc-900"
+        className="inline-flex items-center justify-center rounded-md bg-[#FFD814] hover:bg-[#F7CA00] border border-[#FCD200] px-6 py-2 text-sm font-medium text-black transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#FF9900] focus-visible:ring-offset-2"
       >
-        Add to cart
+        Add to Cart
       </button>
     </div>
   );

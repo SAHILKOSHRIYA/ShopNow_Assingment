@@ -7,9 +7,12 @@ import { makeStore } from "@/lib/store";
 import type { AppStore } from "@/lib/store";
 import { hydrateCart } from "@/lib/slices/cartSlice";
 import type { CartItem } from "@/lib/slices/cartSlice";
+import { setOrders } from "@/lib/slices/ordersSlice";
+import type { Order } from "@/lib/slices/ordersSlice";
 
 const CART_COOKIE_KEY = "ecommerce_cart_v1";
 const CART_LOCALSTORAGE_KEY = "ecommerce_cart_v1";
+const ORDERS_LOCALSTORAGE_KEY = "ecommerce_orders_v1";
 
 function loadCartFromStorage(): CartItem[] {
   // Try localStorage first, then cookies
@@ -73,11 +76,35 @@ export function ReduxProvider({ children }: { children: React.ReactNode }) {
       storeRef.current?.dispatch(hydrateCart(savedItems));
     }
 
-    // Subscribe to cart changes and persist
+    // Hydrate orders from storage on mount
+    if (typeof window !== "undefined") {
+      try {
+        const ordersData = localStorage.getItem(ORDERS_LOCALSTORAGE_KEY);
+        if (ordersData) {
+          const parsed = JSON.parse(ordersData);
+          if (Array.isArray(parsed)) {
+            storeRef.current?.dispatch(setOrders(parsed));
+          }
+        }
+      } catch {
+        // ignore invalid localStorage
+      }
+    }
+
+    // Subscribe to state changes and persist
     const unsubscribe = storeRef.current?.subscribe(() => {
       const state = storeRef.current!.getState();
       const cartItems = state.cart.items;
       saveCartToStorage(cartItems);
+      
+      // Save orders to localStorage
+      if (typeof window !== "undefined") {
+        try {
+          localStorage.setItem(ORDERS_LOCALSTORAGE_KEY, JSON.stringify(state.orders.orders));
+        } catch {
+          // ignore localStorage errors
+        }
+      }
     });
 
     return () => {

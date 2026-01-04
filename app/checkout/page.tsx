@@ -10,6 +10,7 @@ import {
   type ShippingOption,
   type CartItem,
 } from "@/lib/slices/cartSlice";
+import { addOrder } from "@/lib/slices/ordersSlice";
 import { calculatePriceBreakdown } from "@/lib/utils/priceCalculator";
 import Image from "next/image";
 import Link from "next/link";
@@ -63,7 +64,7 @@ function getShippingOptions(): ShippingOption[] {
   ];
 }
 
-// Default to cheapest option (usually free)
+
 function getDefaultShippingOption(options: ShippingOption[]): ShippingOption {
   return options.reduce((cheapest, current) =>
     current.price < cheapest.price ? current : cheapest
@@ -79,7 +80,7 @@ export default function CheckoutPage() {
   const [isPlacingOrder, setIsPlacingOrder] = useState(false);
   const shippingOptions = getShippingOptions();
 
-  // Set default shipping to cheapest option if none selected
+ 
   useEffect(() => {
     if (!selectedShipping && shippingOptions.length > 0) {
       const defaultOption = getDefaultShippingOption(shippingOptions);
@@ -87,12 +88,12 @@ export default function CheckoutPage() {
     }
   }, [selectedShipping, shippingOptions, dispatch]);
 
-  // Use price calculator for all derived values
+
   const currentShipping = selectedShipping || getDefaultShippingOption(shippingOptions);
   const priceBreakdown = calculatePriceBreakdown(items, currentShipping);
 
   const handlePlaceOrder = async () => {
-    // Validation
+ 
     if (items.length === 0) {
       alert("Your cart is empty!");
       return;
@@ -105,7 +106,7 @@ export default function CheckoutPage() {
 
     setIsPlacingOrder(true);
 
-    // Create order payload
+   
     const orderPayload: OrderPayload = {
       items: items.map((item) => ({
         productId: item.productId || item.id!,
@@ -124,23 +125,24 @@ export default function CheckoutPage() {
     };
 
     try {
-      // Simulate API call - replace with actual backend call
+      
       await new Promise((resolve) => setTimeout(resolve, 1000));
       
-      // In production, send to backend:
-      // const response = await fetch('/api/orders', {
-      //   method: 'POST',
-      //   headers: { 'Content-Type': 'application/json' },
-      //   body: JSON.stringify(orderPayload),
-      // });
-      // if (!response.ok) throw new Error('Order failed');
-
+      
       console.log("Order placed:", orderPayload);
       
-      // Clear cart and redirect
-      dispatch(clearCart());
-      alert("Order placed successfully!");
-      window.location.href = "/";
+      // Save order to Redux store
+      dispatch(addOrder(orderPayload));
+      
+      // Get the order ID from the newly created order
+      // We need to wait a moment for Redux to update, then get the latest order
+      setTimeout(() => {
+        // Clear cart
+        dispatch(clearCart());
+        
+        // Navigate to orders page - the newest order will be first
+        window.location.href = "/orders";
+      }, 100);
     } catch (error) {
       console.error("Order placement failed:", error);
       alert("Failed to place order. Please try again.");
@@ -150,36 +152,38 @@ export default function CheckoutPage() {
 
   if (items.length === 0) {
     return (
-      <main className="mx-auto flex min-h-screen max-w-6xl flex-col items-center justify-center gap-4 px-4 py-10">
-        <h1 className="text-2xl font-semibold text-zinc-900 dark:text-zinc-50">
-          Your cart is empty
-        </h1>
-        <Link
-          href="/"
-          className="rounded-lg bg-emerald-600 px-6 py-2 text-white hover:bg-emerald-700"
-        >
-          Continue Shopping
-        </Link>
+      <main className="bg-[#EAEDED] min-h-screen flex flex-col items-center justify-center gap-4 px-4 py-10">
+        <div className="bg-white border border-gray-200 rounded-sm p-8 text-center">
+          <h1 className="text-2xl font-normal text-gray-900 mb-4">
+            Your cart is empty
+          </h1>
+          <Link
+            href="/"
+            className="inline-block rounded-md bg-[#FFD814] hover:bg-[#F7CA00] border border-[#FCD200] px-6 py-2 text-sm font-medium text-black transition-colors"
+          >
+            Continue Shopping
+          </Link>
+        </div>
       </main>
     );
   }
 
   return (
-    <main className="mx-auto min-h-screen max-w-6xl px-4 py-6 sm:px-6 lg:px-8 lg:py-10">
-      <div className="mb-6 flex items-center justify-between">
-        <h1 className="text-2xl font-semibold text-zinc-900 dark:text-zinc-50">
-          Review your order
-        </h1>
-        <ThemeToggle />
-      </div>
+    <main className="bg-[#EAEDED] min-h-screen">
+      <div className="mx-auto max-w-6xl px-4 py-4 sm:px-6 lg:px-8">
+        <div className="mb-6">
+          <h1 className="text-2xl font-normal text-gray-900">
+            Review your order
+          </h1>
+        </div>
 
-      <div className="grid gap-6 lg:grid-cols-3">
+        <div className="grid gap-6 lg:grid-cols-3">
         {/* Main Content */}
         <div className="lg:col-span-2 space-y-6">
           {/* Delivery Date */}
           {selectedShipping && (
-            <div className="rounded-xl border border-zinc-200 bg-white p-4 shadow-sm dark:border-zinc-800 dark:bg-zinc-900">
-              <p className="text-sm font-medium text-emerald-600 dark:text-emerald-400">
+            <div className="border border-gray-200 bg-white rounded-sm p-4">
+              <p className="text-sm font-medium text-[#007185]">
                 Delivery date: {selectedShipping.label}
               </p>
             </div>
@@ -194,9 +198,9 @@ export default function CheckoutPage() {
               return (
                 <div
                   key={itemId}
-                  className="flex gap-4 rounded-xl border border-zinc-200 bg-white p-4 shadow-sm dark:border-zinc-800 dark:bg-zinc-900"
+                  className="flex gap-4 border border-gray-200 bg-white rounded-sm p-4"
                 >
-                  <div className="relative h-24 w-24 flex-shrink-0 overflow-hidden rounded-lg bg-zinc-100 dark:bg-zinc-800">
+                  <div className="relative h-24 w-24 flex-shrink-0 overflow-hidden bg-white">
                     <Image
                       src={itemImage}
                       alt={itemName}
@@ -206,14 +210,14 @@ export default function CheckoutPage() {
                     />
                   </div>
                   <div className="flex flex-1 flex-col gap-2">
-                    <h3 className="font-medium text-zinc-900 dark:text-zinc-50">
+                    <h3 className="font-normal text-gray-900 text-sm">
                       {itemName}
                     </h3>
-                    <p className="text-sm font-semibold text-red-600 dark:text-red-400">
+                    <p className="text-sm font-bold text-[#B12704]">
                       ${item.price.toFixed(2)}
                     </p>
                     <div className="mt-auto flex items-center gap-4 text-sm">
-                      <span className="text-zinc-600 dark:text-zinc-400">
+                      <span className="text-gray-600">
                         Quantity: {item.quantity}
                       </span>
                       <button
@@ -225,13 +229,13 @@ export default function CheckoutPage() {
                             })
                           )
                         }
-                        className="text-emerald-600 hover:text-emerald-700 dark:text-emerald-400 dark:hover:text-emerald-300"
+                        className="text-[#007185] hover:text-[#C7511F] hover:underline"
                       >
                         Update
                       </button>
                       <button
                         onClick={() => dispatch(removeFromCart(itemId))}
-                        className="text-red-600 hover:text-red-700 dark:text-red-400 dark:hover:text-red-300"
+                        className="text-[#007185] hover:text-[#C7511F] hover:underline"
                       >
                         Delete
                       </button>
@@ -243,31 +247,31 @@ export default function CheckoutPage() {
           </div>
 
           {/* Shipping Options */}
-          <div className="rounded-xl border border-zinc-200 bg-white p-4 shadow-sm dark:border-zinc-800 dark:bg-zinc-900">
-            <h2 className="mb-4 text-sm font-semibold text-zinc-900 dark:text-zinc-50">
+          <div className="border border-gray-200 bg-white rounded-sm p-4">
+            <h2 className="mb-4 text-sm font-semibold text-gray-900">
               Choose a delivery option:
             </h2>
             <div className="space-y-3">
               {shippingOptions.map((option) => (
                 <label
                   key={option.id}
-                  className="flex cursor-pointer items-center gap-3 rounded-lg border border-zinc-200 p-3 transition hover:bg-zinc-50 dark:border-zinc-700 dark:hover:bg-zinc-800/50"
+                  className="flex cursor-pointer items-center gap-3 border border-gray-200 p-3 rounded-sm transition hover:bg-gray-50"
                 >
                   <input
                     type="radio"
                     name="shipping"
                     checked={selectedShipping?.id === option.id}
                     onChange={() => dispatch(setShippingOption(option))}
-                    className="h-4 w-4 text-emerald-600 focus:ring-emerald-500"
+                    className="h-4 w-4 text-[#FF9900] focus:ring-[#FF9900]"
                   />
                   <div className="flex-1">
-                    <p className="text-sm font-medium text-zinc-900 dark:text-zinc-50">
+                    <p className="text-sm font-medium text-gray-900">
                       {option.label}
                     </p>
                   </div>
-                  <p className="text-sm text-zinc-600 dark:text-zinc-400">
+                  <p className="text-sm text-gray-600">
                     {option.isFree ? (
-                      <span className="text-emerald-600 dark:text-emerald-400">
+                      <span className="text-[#007185] font-semibold">
                         FREE Shipping
                       </span>
                     ) : (
@@ -282,59 +286,60 @@ export default function CheckoutPage() {
 
         {/* Order Summary */}
         <div className="lg:col-span-1">
-          <div className="sticky top-4 rounded-xl border border-zinc-200 bg-white p-6 shadow-sm dark:border-zinc-800 dark:bg-zinc-900">
-            <h2 className="mb-4 text-lg font-semibold text-zinc-900 dark:text-zinc-50">
+          <div className="sticky top-4 border border-gray-200 bg-white rounded-sm p-6">
+            <h2 className="mb-4 text-lg font-semibold text-gray-900">
               Order Summary
             </h2>
-            <div className="space-y-3 border-b border-zinc-200 pb-4 dark:border-zinc-700">
+            <div className="space-y-3 border-b border-gray-200 pb-4">
               <div className="flex justify-between text-sm">
-                <span className="text-zinc-600 dark:text-zinc-400">
+                <span className="text-gray-600">
                   Items ({priceBreakdown.itemCount}):
                 </span>
-                <span className="text-zinc-900 dark:text-zinc-50">
+                <span className="text-gray-900">
                   ${priceBreakdown.itemsTotal.toFixed(2)}
                 </span>
               </div>
               <div className="flex justify-between text-sm">
-                <span className="text-zinc-600 dark:text-zinc-400">
+                <span className="text-gray-600">
                   Shipping & handling:
                 </span>
-                <span className="text-zinc-900 dark:text-zinc-50">
+                <span className="text-gray-900">
                   ${priceBreakdown.shippingCost.toFixed(2)}
                 </span>
               </div>
               <div className="flex justify-between text-sm">
-                <span className="text-zinc-600 dark:text-zinc-400">
+                <span className="text-gray-600">
                   Total before tax:
                 </span>
-                <span className="text-zinc-900 dark:text-zinc-50">
+                <span className="text-gray-900">
                   ${priceBreakdown.subtotal.toFixed(2)}
                 </span>
               </div>
               <div className="flex justify-between text-sm">
-                <span className="text-zinc-600 dark:text-zinc-400">
+                <span className="text-gray-600">
                   Estimated tax (10%):
                 </span>
-                <span className="text-zinc-900 dark:text-zinc-50">
+                <span className="text-gray-900">
                   ${priceBreakdown.tax.toFixed(2)}
                 </span>
               </div>
             </div>
             <div className="mt-4 flex justify-between text-lg font-semibold">
-              <span className="text-red-600 dark:text-red-400">Order total:</span>
-              <span className="text-red-600 dark:text-red-400">
+              <span className="text-[#B12704]">Order total:</span>
+              <span className="text-[#B12704]">
                 ${priceBreakdown.orderTotal.toFixed(2)}
               </span>
             </div>
             <button
               onClick={handlePlaceOrder}
               disabled={isPlacingOrder || items.length === 0 || !currentShipping}
-              className="mt-6 w-full rounded-lg bg-yellow-400 px-4 py-3 font-medium text-zinc-900 transition hover:bg-yellow-500 disabled:cursor-not-allowed disabled:opacity-50"
+              className="mt-6 w-full rounded-md bg-[#FFD814] hover:bg-[#F7CA00] border border-[#FCD200] px-4 py-3 text-sm font-medium text-black transition-colors disabled:cursor-not-allowed disabled:opacity-50 disabled:bg-gray-300 disabled:border-gray-300"
             >
               {isPlacingOrder ? "Placing order..." : "Place your order"}
             </button>
           </div>
         </div>
+      </div>
       </div>
     </main>
   );

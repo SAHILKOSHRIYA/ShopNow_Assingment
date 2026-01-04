@@ -1,9 +1,4 @@
-/**
- * API Client Functions for Orders
- * 
- * This file contains functions to interact with the orders API
- * Location: lib/api/orders.ts
- */
+
 
 import type { OrderPayload } from '@/app/checkout/page';
 
@@ -15,9 +10,7 @@ export interface OrderResponse {
   message?: string;
 }
 
-/**
- * Create a new order
- */
+
 export async function createOrder(order: OrderPayload): Promise<OrderResponse> {
   const response = await fetch(`${API_BASE_URL}/orders`, {
     method: 'POST',
@@ -35,9 +28,7 @@ export async function createOrder(order: OrderPayload): Promise<OrderResponse> {
   return response.json();
 }
 
-/**
- * Get order by ID
- */
+
 export async function getOrder(orderId: string) {
   const response = await fetch(`${API_BASE_URL}/orders/${orderId}`);
 

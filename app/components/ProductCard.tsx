@@ -51,27 +51,27 @@ export function ProductCard({ product }: Props) {
   const isOutOfStock = product.availableStock !== undefined && product.availableStock === 0;
 
   return (
-    <div className="flex flex-col rounded-xl border border-zinc-200 bg-white shadow-sm transition hover:-translate-y-1 hover:shadow-md dark:border-zinc-800 dark:bg-zinc-900">
-      <Link href={`/product/${product.id}`} className="relative aspect-[4/3] w-full overflow-hidden rounded-t-xl bg-zinc-100 dark:bg-zinc-800">
+    <div className="flex flex-col bg-white border border-gray-200 rounded-sm p-4 h-full hover:shadow-md transition-shadow">
+      <Link href={`/product/${product.id}`} className="relative aspect-square w-full overflow-hidden bg-white mb-3">
         <Image
           src={imageUrl}
           alt={productName}
           fill
           sizes="(min-width: 1024px) 25vw, 50vw"
-          className="object-contain p-4"
+          className="object-contain p-2"
         />
         {isOutOfStock && (
-          <div className="absolute inset-0 flex items-center justify-center bg-black/50">
+          <div className="absolute inset-0 flex items-center justify-center bg-black/40">
             <span className="rounded bg-red-600 px-3 py-1 text-sm font-medium text-white">
               Out of Stock
             </span>
           </div>
         )}
       </Link>
-      <div className="flex flex-1 flex-col gap-2 p-4">
+      <div className="flex flex-1 flex-col gap-2">
         <Link
           href={`/product/${product.id}`}
-          className="line-clamp-2 text-sm font-semibold text-zinc-900 hover:text-zinc-700 dark:text-zinc-100 dark:hover:text-zinc-300"
+          className="line-clamp-2 text-sm text-[#007185] hover:text-[#C7511F] hover:underline cursor-pointer leading-tight"
         >
           {productName}
         </Link>
@@ -80,32 +80,20 @@ export function ProductCard({ product }: Props) {
         <RatingStars rating={rating} reviewCount={reviewCount} size="sm" />
         
         {/* Price */}
-        <span className="text-lg font-bold text-emerald-600 dark:text-emerald-400">
-          ${product.price.toFixed(2)}
-        </span>
-
-        {/* Quantity Selector and Add to Cart */}
-        <div className="mt-auto flex items-center gap-2">
-          <select
-            value={quantity}
-            onChange={(e) => setQuantity(Number(e.target.value))}
-            disabled={isOutOfStock || isAdding}
-            className="flex-1 rounded-md border border-zinc-300 bg-white px-2 py-1.5 text-sm text-zinc-900 outline-none focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500 dark:border-zinc-700 dark:bg-zinc-800 dark:text-zinc-100 disabled:opacity-50"
-          >
-            {Array.from({ length: Math.min(product.availableStock ?? 10, 10) }, (_, i) => i + 1).map((num) => (
-              <option key={num} value={num}>
-                {num}
-              </option>
-            ))}
-          </select>
-          <button
-            onClick={handleAdd}
-            disabled={isOutOfStock || isAdding}
-            className="inline-flex items-center justify-center rounded-full bg-yellow-400 px-4 py-1.5 text-sm font-medium text-zinc-900 shadow-sm transition hover:bg-yellow-500 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-yellow-500 focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 dark:ring-offset-zinc-900"
-          >
-            {isAdding ? "Adding..." : "Add to Cart"}
-          </button>
+        <div className="flex items-baseline gap-1">
+          <span className="text-lg font-bold text-[#B12704]">
+            ${product.price.toFixed(2)}
+          </span>
         </div>
+
+        {/* Add to Cart Button - Amazon style */}
+        <button
+          onClick={handleAdd}
+          disabled={isOutOfStock || isAdding}
+          className="mt-2 w-full rounded-md bg-[#FFD814] hover:bg-[#F7CA00] border border-[#FCD200] text-sm font-medium text-black py-2 px-4 transition-colors disabled:cursor-not-allowed disabled:opacity-50 disabled:bg-gray-300 disabled:border-gray-300"
+        >
+          {isAdding ? "Adding..." : "Add to Cart"}
+        </button>
       </div>
     </div>
   );

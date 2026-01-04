@@ -1,11 +1,13 @@
 import { configureStore } from '@reduxjs/toolkit';
 import cartReducer from './slices/cartSlice';
+import ordersReducer from './slices/ordersSlice';
 import { productsApi } from './api/productsApi';
 
 export const makeStore = () => {
   return configureStore({
     reducer: {
       cart: cartReducer,
+      orders: ordersReducer,
       [productsApi.reducerPath]: productsApi.reducer,
     },
     middleware: (getDefaultMiddleware) =>
