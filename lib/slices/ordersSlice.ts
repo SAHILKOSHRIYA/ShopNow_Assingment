@@ -50,10 +50,14 @@ const ordersSlice = createSlice({
     setOrders(state, action: PayloadAction<Order[]>) {
       state.orders = action.payload;
     },
+    cancelOrder(state, action: PayloadAction<string>) {
+      // Remove cancelled orders
+      state.orders = state.orders.filter((o) => o.orderId !== action.payload);
+    },
   },
 });
 
-export const { addOrder, updateOrderStatus, setOrders } = ordersSlice.actions;
+export const { addOrder, updateOrderStatus, setOrders, cancelOrder } = ordersSlice.actions;
 export default ordersSlice.reducer;
 
 

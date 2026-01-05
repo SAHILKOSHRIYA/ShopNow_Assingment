@@ -12,32 +12,13 @@
   --font-mono: var(--font-geist-mono);
 }
 
-:root.dark {
-  --background: #0a0a0a;
-  --foreground: #ededed;
-}
-
-@media (prefers-color-scheme: dark) {
-  :root:not(.dark):not(.light) {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
-}
-
 body {
   background: var(--background);
   color: var(--foreground);
   font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
-  transition: background-color 0.2s ease, color 0.2s ease;
 }
 
-/* Ensure select options are visible in dark mode */
 select option {
   background-color: white;
   color: #171717;
-}
-
-.dark select option {
-  background-color: #18181b;
-  color: #f4f4f5;
 }

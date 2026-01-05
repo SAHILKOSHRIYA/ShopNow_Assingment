@@ -54,7 +54,7 @@ export function RatingStars({ rating, reviewCount, size = "md" }: Props) {
         {Array.from({ length: emptyStars }).map((_, i) => (
           <svg
             key={`empty-${i}`}
-            className={`${sizeClasses[size]} text-zinc-300 dark:text-zinc-600`}
+            className={`${sizeClasses[size]} text-zinc-300`}
             fill="currentColor"
             viewBox="0 0 20 20"
           >
@@ -70,4 +70,3 @@ export function RatingStars({ rating, reviewCount, size = "md" }: Props) {
     </div>
   );
 }
-

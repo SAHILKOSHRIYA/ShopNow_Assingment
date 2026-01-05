@@ -19,10 +19,10 @@ function OrderTrackingContent({ orderId }: { orderId: string }) {
 
   if (!order) {
     return (
-      <main className="bg-[#EAEDED] min-h-screen">
-        <div className="mx-auto max-w-4xl px-4 py-4 sm:px-6 lg:px-8">
-          <div className="bg-white border border-gray-200 rounded-sm p-8 text-center">
-            <h1 className="text-xl font-normal text-gray-900 mb-4">Order not found</h1>
+      <main className="bg-[#EAEDED] min-h-screen w-full overflow-x-hidden">
+        <div className="w-full px-2 sm:px-3 py-2 sm:py-3">
+          <div className="bg-white border border-gray-200 rounded-sm p-6 sm:p-8 text-center">
+            <h1 className="text-lg sm:text-xl font-normal text-gray-900 mb-4">Order not found</h1>
             <Link
               href="/orders"
               className="text-[#007185] hover:text-[#C7511F] hover:underline"
@@ -38,10 +38,10 @@ function OrderTrackingContent({ orderId }: { orderId: string }) {
   const item = order.items[itemIndex];
   if (!item) {
     return (
-      <main className="bg-[#EAEDED] min-h-screen">
-        <div className="mx-auto max-w-4xl px-4 py-4 sm:px-6 lg:px-8">
-          <div className="bg-white border border-gray-200 rounded-sm p-8 text-center">
-            <h1 className="text-xl font-normal text-gray-900 mb-4">Item not found</h1>
+      <main className="bg-[#EAEDED] min-h-screen w-full overflow-x-hidden">
+        <div className="w-full px-2 sm:px-3 py-2 sm:py-3">
+          <div className="bg-white border border-gray-200 rounded-sm p-6 sm:p-8 text-center">
+            <h1 className="text-lg sm:text-xl font-normal text-gray-900 mb-4">Item not found</h1>
             <Link
               href="/orders"
               className="text-[#007185] hover:text-[#C7511F] hover:underline"
@@ -86,12 +86,12 @@ function OrderTrackingContent({ orderId }: { orderId: string }) {
         </Link>
 
         <div className="bg-white border border-gray-200 rounded-sm p-6">
-          <h1 className="text-2xl font-normal text-gray-900 mb-4">
+          <h1 className="text-xl sm:text-2xl font-normal text-gray-900 mb-3 sm:mb-4">
             Arriving on {formattedDate}
           </h1>
 
-          <div className="mb-6">
-            <h2 className="text-lg font-medium text-gray-900 mb-2">{itemName}</h2>
+          <div className="mb-4 sm:mb-6">
+            <h2 className="text-base sm:text-lg font-medium text-gray-900 mb-1 sm:mb-2">{itemName}</h2>
             <p className="text-sm text-gray-600">Quantity: {item.quantity}</p>
           </div>
 
@@ -109,7 +109,7 @@ function OrderTrackingContent({ orderId }: { orderId: string }) {
 
           {/* Progress Bar */}
           <div className="mb-4">
-            <div className="flex justify-between mb-2 text-sm text-gray-600">
+            <div className="flex justify-between mb-2 text-xs sm:text-sm text-gray-600">
               <span className={order.status === "preparing" ? "font-medium text-gray-900" : ""}>
                 Preparing
               </span>
@@ -128,8 +128,8 @@ function OrderTrackingContent({ orderId }: { orderId: string }) {
             </div>
           </div>
 
-          <div className="mt-6 pt-6 border-t border-gray-200">
-            <div className="text-sm text-gray-600">
+          <div className="mt-4 sm:mt-6 pt-4 sm:pt-6 border-t border-gray-200">
+            <div className="text-xs sm:text-sm text-gray-600">
               <p className="mb-2">
                 <span className="font-medium">Order ID:</span> {order.orderId}
               </p>
@@ -149,9 +149,9 @@ export default function OrderTrackingPage({ params }: Props) {
   
   return (
     <Suspense fallback={
-      <main className="bg-[#EAEDED] min-h-screen">
-        <div className="mx-auto max-w-4xl px-4 py-4 sm:px-6 lg:px-8">
-          <div className="bg-white border border-gray-200 rounded-sm p-8 text-center">
+      <main className="bg-[#EAEDED] min-h-screen w-full overflow-x-hidden">
+        <div className="w-full px-2 sm:px-3 py-2 sm:py-3">
+          <div className="bg-white border border-gray-200 rounded-sm p-6 sm:p-8 text-center">
             <p className="text-gray-600">Loading...</p>
           </div>
         </div>
