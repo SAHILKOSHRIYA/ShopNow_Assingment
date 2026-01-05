@@ -15,7 +15,7 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Ecommerce Store",
+  title: "ShopNow",
   description: "Demo ecommerce store built with Next.js and Redux Toolkit",
 };
 
