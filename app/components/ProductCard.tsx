@@ -61,14 +61,14 @@ export function ProductCard({ product }: Props) {
   const isOutOfStock = product.availableStock !== undefined && product.availableStock === 0;
 
   return (
-    <div className="flex flex-col bg-white border border-gray-200 rounded-sm p-2 sm:p-3 h-full hover:shadow-md transition-shadow">
-      <Link href={`/product/${product.id}`} className="relative aspect-square w-full overflow-hidden bg-white mb-2 sm:mb-3">
+    <div className="flex flex-col bg-white border border-gray-200 rounded-sm p-2 h-full hover:shadow-md transition-shadow">
+      <Link href={`/product/${product.id}`} className="relative aspect-[4/3] w-full overflow-hidden bg-white mb-2">
         <Image
           src={imageUrl}
           alt={productName}
           fill
           sizes="(min-width: 1280px) 25vw, (min-width: 1024px) 33vw, (min-width: 640px) 50vw, 100vw"
-          className="object-contain p-1 sm:p-2"
+          className="object-contain p-2"
         />
         {isOutOfStock && (
           <div className="absolute inset-0 flex items-center justify-center bg-black/40">
@@ -78,17 +78,17 @@ export function ProductCard({ product }: Props) {
           </div>
         )}
       </Link>
-      <div className="flex flex-1 flex-col gap-1.5 sm:gap-2">
+      <div className="flex flex-1 flex-col gap-1">
         <Link
           href={`/product/${product.id}`}
           className="line-clamp-2 text-xs sm:text-sm text-[#007185] hover:text-[#C7511F] hover:underline cursor-pointer leading-tight"
         >
           {productName}
         </Link>
-        
+
         {/* Rating and Reviews */}
         <RatingStars rating={rating} reviewCount={reviewCount} size="sm" />
-        
+
         {/* Price */}
         <div className="flex items-baseline gap-1">
           <span className="text-base sm:text-lg font-bold text-[#B12704]">
