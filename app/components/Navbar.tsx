@@ -33,7 +33,7 @@ export function Navbar() {
         {/* Logo */}
         <Link
           href="/"
-          className="flex items-center gap-2 hover:opacity-75 transition-opacity"
+          className="flex items-center gap-2 hover:opacity-75 transition-all p-1 border-2 border-transparent focus:border-[#D4AF37] focus:outline-none rounded-md"
           aria-label="ShopNow Home"
         >
           <svg
@@ -88,7 +88,7 @@ export function Navbar() {
           {/* Returns & Orders */}
           <Link
             href="/orders"
-            className="hidden lg:block text-black hover:underline"
+            className="hidden lg:block text-black hover:underline p-1 border-2 border-transparent focus:border-[#D4AF37] focus:outline-none rounded-md transition-all"
             aria-label="Returns and Orders"
           >
             Orders
@@ -97,7 +97,7 @@ export function Navbar() {
           {/* Cart */}
           <Link
             href="/checkout"
-            className="relative flex items-center gap-1 text-black hover:opacity-75 transition-opacity"
+            className="relative flex items-center gap-1 text-black hover:opacity-75 transition-all p-1 border-2 border-transparent focus:border-[#D4AF37] focus:outline-none rounded-md"
             aria-label={`Cart with ${itemCount} items`}
           >
             <svg

@@ -61,74 +61,64 @@ export function ProductCard({ product }: Props) {
   const isOutOfStock = product.availableStock !== undefined && product.availableStock === 0;
 
   return (
-    <div className="group flex flex-col bg-white h-full transition-transform hover:-translate-y-1 duration-300">
-      <Link href={`/product/${product.id}`} className="relative aspect-[4/3] w-full overflow-hidden bg-gray-50 mb-4">
+    <div className="group flex flex-col bg-white h-full rounded-2xl overflow-hidden shadow-sm border border-gray-100 hover:shadow-lg transition-all duration-300">
+      <Link href={`/product/${product.id}`} className="relative aspect-square w-full overflow-hidden bg-gray-50 p-6">
         <Image
           src={imageUrl}
           alt={productName}
           fill
           sizes="(min-width: 1280px) 25vw, (min-width: 1024px) 33vw, (min-width: 640px) 50vw, 100vw"
-          className="object-contain p-4 mix-blend-multiply transition-transform group-hover:scale-105"
+          className="object-contain mix-blend-multiply transition-transform group-hover:scale-105"
         />
         {isOutOfStock && (
-          <div className="absolute top-2 left-2">
-            <span className="bg-[#E6E6FA] text-black px-3 py-1 text-xs font-bold uppercase tracking-wider">
+          <div className="absolute top-4 left-4">
+            <span className="bg-[#E6E6FA] text-black px-3 py-1 text-xs font-bold uppercase tracking-wider rounded-full">
               Out of Stock
             </span>
           </div>
         )}
       </Link>
-      <div className="flex flex-1 flex-col px-2 pb-4">
-        {/* Rating and Reviews */}
-        <div className="mb-2">
-          <RatingStars rating={rating} reviewCount={reviewCount} size="sm" />
-        </div>
-
+      <div className="flex flex-1 flex-col p-4">
+        {/* Title */}
         <Link
           href={`/product/${product.id}`}
-          className="text-sm font-medium text-black hover:text-gray-600 mb-2 line-clamp-2 uppercase tracking-wide cursor-pointer"
+          className="text-sm font-bold text-gray-900 mb-2 line-clamp-1 hover:text-black transition-colors"
+          title={productName}
         >
           {productName}
         </Link>
 
-        {/* Price */}
+        {/* Rating */}
         <div className="mb-4">
-          <span className="text-lg font-bold text-black">
-            ${product.price.toFixed(2)}
-          </span>
+          <RatingStars rating={rating} reviewCount={reviewCount} size="sm" />
         </div>
 
-        {/* Add to Cart / Remove from Cart Button */}
-        <div className="mt-auto">
+        {/* Price and Add Button Row */}
+        <div className="mt-auto flex items-center justify-between">
+          <span className="text-xl font-black text-black">
+            ${product.price.toFixed(2)}
+          </span>
+
           {isInCart ? (
             <button
               onClick={handleRemove}
               disabled={isOutOfStock}
-              className="w-full bg-[#E6E6FA] hover:bg-[#D8BFD8] text-black text-sm font-bold uppercase tracking-wider py-3 px-4 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+              className="flex items-center gap-2 bg-[#E6E6FA] hover:bg-[#D8BFD8] text-black text-xs font-bold uppercase tracking-wider py-2 px-4 rounded-lg transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
               aria-label="Remove from cart"
             >
-              Remove from Cart
+              Remove
             </button>
           ) : (
             <button
               onClick={handleAdd}
               disabled={isOutOfStock || isAdding}
-              className="w-full bg-black hover:bg-gray-800 text-white text-sm font-bold uppercase tracking-wider py-3 px-4 transition-colors disabled:opacity-50 disabled:cursor-not-allowed group-hover:shadow-lg"
+              className="flex items-center gap-2 bg-[#232F3E] hover:bg-black text-white text-sm font-bold py-2 px-4 rounded-lg transition-colors disabled:opacity-50 disabled:cursor-not-allowed shadow-md hover:shadow-xl"
               aria-label={isOutOfStock ? "Out of stock" : isAdding ? "Adding to cart" : "Add to cart"}
             >
-              {isAdding ? (
-                <span className="flex items-center justify-center gap-2">
-                  <svg className="h-4 w-4 animate-spin" fill="none" viewBox="0 0 24 24">
-                    <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
-                    <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z" />
-                  </svg>
-                  Processing
-                </span>
-              ) : isOutOfStock ? (
-                "Out of Stock"
-              ) : (
-                "Add to Cart"
-              )}
+              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor" className="w-4 h-4">
+                <path strokeLinecap="round" strokeLinejoin="round" d="M2.25 3h1.386c.51 0 .955.343 1.087.835l.383 1.437M7.5 14.25a3 3 0 00-3 3h15.75m-12.75-3h11.218c1.121-2.3 2.1-4.684 2.924-7.138a60.114 60.114 0 00-16.536-1.84M7.5 14.25L5.106 5.272M6 20.25a.75.75 0 11-1.5 0 .75.75 0 011.5 0zm12.75 0a.75.75 0 11-1.5 0 .75.75 0 011.5 0z" />
+              </svg>
+              {isAdding ? "..." : "Add"}
             </button>
           )}
         </div>
