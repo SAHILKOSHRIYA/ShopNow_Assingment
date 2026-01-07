@@ -94,7 +94,7 @@ export function ProductCard({ product }: Props) {
         </div>
 
         {/* Price and Add Button Row */}
-        <div className="mt-auto flex items-center justify-between">
+        <div className="mt-auto flex flex-wrap gap-2 items-center justify-between">
           <span className="text-xl font-black text-black">
             ${product.price.toFixed(2)}
           </span>

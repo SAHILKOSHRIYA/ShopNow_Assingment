@@ -12,11 +12,13 @@ export function Navbar() {
   const itemCount = useMemo(() => calculateItemCount(items), [items]);
   const router = useRouter();
   const [searchQuery, setSearchQuery] = useState("");
+  const [isSearchOpen, setIsSearchOpen] = useState(false);
 
   const handleSearch = useCallback((e: React.FormEvent) => {
     e.preventDefault();
     if (searchQuery.trim()) {
       router.push(`/?search=${encodeURIComponent(searchQuery.trim())}`);
+      setIsSearchOpen(false);
     } else {
       router.push("/");
     }
@@ -30,6 +32,17 @@ export function Navbar() {
   return (
     <nav className="sticky top-0 z-50 w-full bg-white border-b border-gray-200 px-4 py-4 uppercase tracking-wider font-bold text-sm">
       <div className="flex items-center justify-between w-full max-w-7xl mx-auto">
+
+        {/* Mobile: Search Toggle (Left) */}
+        <button
+          className="md:hidden p-2 -ml-2 text-black"
+          onClick={() => setIsSearchOpen(!isSearchOpen)}
+        >
+          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor" className="w-6 h-6">
+            <path strokeLinecap="round" strokeLinejoin="round" d="M21 21l-5.197-5.197m0 0A7.5 7.5 0 105.196 5.196a7.5 7.5 0 0010.607 10.607z" />
+          </svg>
+        </button>
+
         {/* Logo */}
         <Link
           href="/"
@@ -44,9 +57,10 @@ export function Navbar() {
           >
             <path fillRule="evenodd" d="M7.5 6v.75H5.513c-.96 0-1.764.724-1.865 1.679l-1.263 12A1.875 1.875 0 004.25 22.5h15.5a1.875 1.875 0 001.865-2.071l-1.263-12a1.875 1.875 0 00-1.865-1.679H16.5V6a4.5 4.5 0 10-9 0zM12 3a3 3 0 00-3 3v.75h6V6a3 3 0 00-3-3zm-3 8.25a3 3 0 106 0v-.75a.75.75 0 011.5 0v.75a4.5 4.5 0 11-9 0v-.75a.75.75 0 011.5 0v.75z" clipRule="evenodd" />
           </svg>
-          <span className="text-2xl font-black text-black">SHOPNOW</span>
+          <span className="text-xl sm:text-2xl font-black text-black">SHOPNOW</span>
         </Link>
 
+        {/* Desktop Search */}
         <form onSubmit={handleSearch} className="hidden md:flex flex-1 max-w-lg mx-8 relative group">
           <input
             type="text"
@@ -84,14 +98,19 @@ export function Navbar() {
           </button>
         </form>
 
-        <div className="flex items-center gap-6">
-          {/* Returns & Orders */}
+        <div className="flex items-center gap-4 sm:gap-6">
+          {/* Returns & Orders (Icon on Mobile, Text on Desktop) */}
           <Link
             href="/orders"
-            className="hidden lg:block text-black hover:underline p-1 border-2 border-transparent focus:border-[#D4AF37] focus:outline-none rounded-md transition-all"
+            className="text-black hover:underline p-1 border-2 border-transparent focus:border-[#D4AF37] focus:outline-none rounded-md transition-all"
             aria-label="Returns and Orders"
           >
-            Orders
+            {/* Desktop Text */}
+            <span className="hidden lg:block">Orders</span>
+            {/* Mobile Icon */}
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor" className="w-6 h-6 lg:hidden">
+              <path strokeLinecap="round" strokeLinejoin="round" d="M15.75 6a3.75 3.75 0 11-7.5 0 3.75 3.75 0 017.5 0zM4.501 20.118a7.5 7.5 0 0114.998 0A17.933 17.933 0 0112 21.75c-2.676 0-5.216-.584-7.499-1.632z" />
+            </svg>
           </Link>
 
           {/* Cart */}
@@ -121,6 +140,28 @@ export function Navbar() {
           </Link>
         </div>
       </div>
+
+      {/* Mobile Search Bar (Expandable) */}
+      {isSearchOpen && (
+        <div className="md:hidden absolute top-full left-0 w-full bg-white border-b border-gray-200 p-4 shadow-lg animate-in slide-in-from-top-2">
+          <form onSubmit={handleSearch} className="relative">
+            <input
+              type="text"
+              placeholder="Search products..."
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+              autoFocus
+              className="w-full h-10 pl-4 pr-12 rounded-lg border border-gray-300 bg-gray-50 text-black focus:outline-none focus:border-black focus:ring-1 focus:ring-black"
+            />
+            <button
+              type="submit"
+              className="absolute right-0 top-0 h-10 px-4 text-black"
+            >
+              <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" /></svg>
+            </button>
+          </form>
+        </div>
+      )}
     </nav>
   );
 }

@@ -13,7 +13,7 @@ export default function Home() {
     <Suspense fallback={
       <main className="bg-white min-h-screen w-full overflow-x-hidden">
         <div className="w-full max-w-7xl mx-auto px-4 py-8">
-          <div className="grid gap-6 grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5">
+          <div className="grid gap-4 sm:gap-6 grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5">
             {Array.from({ length: 8 }).map((_, i) => (
               <ProductCardSkeleton key={i} />
             ))}
@@ -137,7 +137,7 @@ function HomeContent() {
         </div>
 
         {loading ? (
-          <div className="grid gap-6 grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5">
+          <div className="grid gap-4 sm:gap-6 grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5">
             {Array.from({ length: 8 }).map((_, i) => (
               <ProductCardSkeleton key={i} />
             ))}
@@ -149,7 +149,7 @@ function HomeContent() {
             </p>
           </div>
         ) : (
-          <div className="grid gap-6 grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5">
+          <div className="grid gap-4 sm:gap-6 grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5">
             {sorted.map((p) => (
               <ProductCard key={p.id} product={p} />
             ))}
