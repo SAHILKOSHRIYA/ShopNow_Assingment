@@ -78,7 +78,7 @@ export default function CheckoutPage() {
   const [isPlacingOrder, setIsPlacingOrder] = useState(false);
   const shippingOptions = getShippingOptions();
 
- 
+
   useEffect(() => {
     if (!selectedShipping && shippingOptions.length > 0) {
       const defaultOption = getDefaultShippingOption(shippingOptions);
@@ -91,7 +91,7 @@ export default function CheckoutPage() {
   const priceBreakdown = calculatePriceBreakdown(items, currentShipping);
 
   const handlePlaceOrder = async () => {
- 
+
     if (items.length === 0) {
       alert("Your cart is empty!");
       return;
@@ -104,7 +104,7 @@ export default function CheckoutPage() {
 
     setIsPlacingOrder(true);
 
-   
+
     const orderPayload: OrderPayload = {
       items: items.map((item) => ({
         productId: item.productId || item.id!,
@@ -123,18 +123,18 @@ export default function CheckoutPage() {
     };
 
     try {
-      
+
       await new Promise((resolve) => setTimeout(resolve, 1000));
-      
-      
+
+
       console.log("Order placed:", orderPayload);
-      
+
       // Save order to Redux store
       dispatch(addOrder(orderPayload));
-      
+
       // Clear cart
       dispatch(clearCart());
-      
+
       // Navigate to success page
       window.location.href = `/orders/success`;
     } catch (error) {
@@ -146,16 +146,16 @@ export default function CheckoutPage() {
 
   if (items.length === 0) {
     return (
-      <main className="bg-[#EAEDED] min-h-screen flex flex-col items-center justify-center gap-4 px-4 py-10">
-        <div className="bg-white border border-gray-200 rounded-sm p-8 text-center">
-          <h1 className="text-2xl font-normal text-gray-900 mb-4">
+      <main className="bg-white min-h-screen flex flex-col items-center justify-center gap-6 px-4 py-20">
+        <div className="text-center">
+          <h1 className="text-3xl font-black uppercase tracking-tight text-black mb-6">
             Your cart is empty
           </h1>
           <Link
             href="/"
-            className="inline-block rounded-md bg-[#FFD814] hover:bg-[#F7CA00] border border-[#FCD200] px-6 py-2 text-sm font-medium text-black transition-colors"
+            className="inline-block bg-black hover:bg-gray-800 text-white font-bold uppercase tracking-wider px-8 py-4 transition-colors"
           >
-            Continue Shopping
+            Start Shopping
           </Link>
         </div>
       </main>
@@ -163,179 +163,207 @@ export default function CheckoutPage() {
   }
 
   return (
-    <main className="bg-[#EAEDED] min-h-screen w-full overflow-x-hidden">
-      <div className="w-full px-2 sm:px-3 py-2 sm:py-3">
-        <div className="mb-4 sm:mb-6">
-          <h1 className="text-xl sm:text-2xl font-normal text-gray-900">
-            Review your order
+    <main className="bg-white min-h-screen w-full">
+      <div className="w-full max-w-7xl mx-auto px-4 py-8 sm:py-12">
+        <div className="mb-8 border-b border-gray-100 pb-4">
+          <h1 className="text-3xl font-black uppercase tracking-tight text-black">
+            Checkout
           </h1>
         </div>
 
-        <div className="grid gap-4 sm:gap-6 lg:grid-cols-3">
-        {/* Main Content */}
-        <div className="lg:col-span-2 space-y-4 sm:space-y-6">
-          {/* Delivery Date */}
-          {selectedShipping && (
-            <div className="border border-gray-200 bg-white rounded-sm p-3 sm:p-4">
-              <p className="text-sm font-medium text-[#007185]">
-                Delivery: {selectedShipping.label}
-              </p>
-            </div>
-          )}
+        <div className="grid gap-12 lg:grid-cols-3">
+          {/* Main Content */}
+          <div className="lg:col-span-2 space-y-12">
 
-          {/* Cart Items */}
-          <div className="space-y-3 sm:space-y-4">
-            {items.map((item) => {
-              const itemId = item.productId || item.id!;
-              const itemName = item.name || item.title!;
-              const itemImage = item.imageUrl || item.image!;
-              return (
-                <div
-                  key={itemId}
-                  className="flex gap-3 sm:gap-4 border border-gray-200 bg-white rounded-sm p-3 sm:p-4"
-                >
-                  <div className="relative h-20 w-20 sm:h-24 sm:w-24 flex-shrink-0 overflow-hidden bg-white">
-                    <Image
-                      src={itemImage}
-                      alt={itemName}
-                      fill
-                      sizes="96px"
-                      className="object-contain p-1 sm:p-2"
-                    />
-                  </div>
-                  <div className="flex flex-1 flex-col gap-1.5 sm:gap-2 min-w-0">
-                    <h3 className="font-normal text-gray-900 text-xs sm:text-sm line-clamp-2">
-                      {itemName}
-                    </h3>
-                    <p className="text-sm font-bold text-[#B12704]">
-                      ${item.price.toFixed(2)}
-                    </p>
-                    <div className="mt-auto flex items-center gap-2 sm:gap-3 text-xs sm:text-sm flex-wrap">
-                      <span className="text-gray-600">
-                        Qty: {item.quantity}
-                      </span>
-                      <button
-                        onClick={() =>
-                          dispatch(
-                            updateQuantity({
-                              id: itemId,
-                              quantity: item.quantity + 1,
-                            })
-                          )
-                        }
-                        className="text-[#007185] hover:text-[#C7511F] hover:underline"
-                      >
-                        Update
-                      </button>
+            {/* Cart Items */}
+            <div>
+              <h2 className="text-xl font-bold uppercase tracking-wide mb-6">Your Items</h2>
+              <div className="space-y-6">
+                {items.map((item) => {
+                  const itemId = item.productId || item.id!;
+                  const itemName = item.name || item.title!;
+                  const itemImage = item.imageUrl || item.image!;
+                  return (
+
+                    <div
+                      key={itemId}
+                      className="flex items-start gap-4 sm:gap-6 border-b border-gray-100 pb-6"
+                    >
+                      {/* Left Remove Icon */}
                       <button
                         onClick={() => dispatch(removeFromCart(itemId))}
-                        className="text-red-600 hover:text-red-700 hover:underline"
+                        className="mt-2 text-gray-400 hover:text-red-600 transition-colors"
+                        aria-label="Remove item"
                       >
-                        Remove
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-5 h-5 sm:w-6 sm:h-6">
+                          <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
+                        </svg>
                       </button>
+
+                      <div className="relative h-24 w-24 flex-shrink-0 overflow-hidden bg-gray-50">
+                        <Image
+                          src={itemImage}
+                          alt={itemName}
+                          fill
+                          sizes="96px"
+                          className="object-contain p-2 mix-blend-multiply"
+                        />
+                      </div>
+                      <div className="flex flex-1 flex-col justify-between min-h-[6rem]">
+                        <div>
+                          <h3 className="font-bold text-black text-sm sm:text-base uppercase tracking-wide leading-snug mb-2">
+                            {itemName}
+                          </h3>
+                          <p className="text-lg font-bold text-black">
+                            ${item.price.toFixed(2)}
+                          </p>
+                        </div>
+
+                        <div className="flex items-center gap-4 mt-4">
+                          <div className="flex items-center">
+                            <span className="text-gray-600 font-medium mr-4 text-sm">Qty:</span>
+                            <div className="flex items-center border border-gray-300 rounded-sm">
+                              {/* Decrease */}
+                              <button
+                                onClick={() => {
+                                  if (item.quantity > 1) {
+                                    dispatch(updateQuantity({ id: itemId, quantity: item.quantity - 1 }));
+                                  } else {
+                                    dispatch(removeFromCart(itemId));
+                                  }
+                                }}
+                                className="p-1 sm:p-2 text-black hover:bg-gray-100 transition-colors"
+                                aria-label="Decrease quantity"
+                              >
+                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-4 h-4">
+                                  <path strokeLinecap="round" strokeLinejoin="round" d="M19.5 12h-15" />
+                                </svg>
+                              </button>
+
+                              <span className="w-8 text-center text-sm font-bold text-black">
+                                {item.quantity}
+                              </span>
+
+                              {/* Increase */}
+                              <button
+                                onClick={() =>
+                                  dispatch(updateQuantity({ id: itemId, quantity: item.quantity + 1 }))
+                                }
+                                className="p-1 sm:p-2 text-black hover:bg-gray-100 transition-colors"
+                                aria-label="Increase quantity"
+                              >
+                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-4 h-4">
+                                  <path strokeLinecap="round" strokeLinejoin="round" d="M12 4.5v15m7.5-7.5h-15" />
+                                </svg>
+                              </button>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
                     </div>
-                  </div>
-                </div>
-              );
-            })}
-          </div>
+                  );
 
-          {/* Shipping Options */}
-          <div className="border border-gray-200 bg-white rounded-sm p-3 sm:p-4">
-            <h2 className="mb-3 sm:mb-4 text-sm font-semibold text-gray-900">
-              Choose delivery option:
-            </h2>
-            <div className="space-y-2 sm:space-y-3">
-              {shippingOptions.map((option) => (
-                <label
-                  key={option.id}
-                  className="flex cursor-pointer items-center gap-3 border border-gray-200 p-2 sm:p-3 rounded-sm transition hover:bg-gray-50"
-                >
-                  <input
-                    type="radio"
-                    name="shipping"
-                    checked={selectedShipping?.id === option.id}
-                    onChange={() => dispatch(setShippingOption(option))}
-                    className="h-4 w-4 text-[#FF9900] focus:ring-[#FF9900]"
-                  />
-                  <div className="flex-1">
-                    <p className="text-sm font-medium text-gray-900">
-                      {option.label}
+                })}
+              </div>
+            </div>
+
+            {/* Shipping Options */}
+            <div>
+              <h2 className="text-xl font-bold uppercase tracking-wide mb-6">
+                Delivery Method
+              </h2>
+              <div className="space-y-4">
+                {shippingOptions.map((option) => (
+                  <label
+                    key={option.id}
+                    className={`flex cursor-pointer items-center gap-4 border p-4 transition-all ${selectedShipping?.id === option.id
+                      ? "border-black bg-gray-50"
+                      : "border-gray-200 hover:border-gray-400"
+                      }`}
+                  >
+                    <div className={`w-5 h-5 rounded-full border flex items-center justify-center ${selectedShipping?.id === option.id ? "border-black" : "border-gray-400"
+                      }`}>
+                      {selectedShipping?.id === option.id && <div className="w-2.5 h-2.5 rounded-full bg-black" />}
+                    </div>
+
+                    <input
+                      type="radio"
+                      name="shipping"
+                      checked={selectedShipping?.id === option.id}
+                      onChange={() => dispatch(setShippingOption(option))}
+                      className="hidden"
+                    />
+                    <div className="flex-1">
+                      <p className="text-sm font-bold uppercase tracking-wide text-black">
+                        {option.label}
+                      </p>
+                    </div>
+                    <p className="text-sm font-bold text-black">
+                      {option.isFree ? (
+                        <span className="text-green-600">
+                          FREE
+                        </span>
+                      ) : (
+                        `$${option.price.toFixed(2)}`
+                      )}
                     </p>
-                  </div>
-                  <p className="text-sm text-gray-600 font-medium">
-                    {option.isFree ? (
-                      <span className="text-[#007185] font-semibold">
-                        FREE
-                      </span>
-                    ) : (
-                      `$${option.price.toFixed(2)}`
-                    )}
-                  </p>
-                </label>
-              ))}
+                  </label>
+                ))}
+              </div>
             </div>
           </div>
-        </div>
 
-        {/* Order Summary */}
-        <div className="lg:col-span-1">
-          <div className="sticky top-4 border border-gray-200 bg-white rounded-sm p-4 sm:p-6">
-            <h2 className="mb-4 text-base sm:text-lg font-semibold text-gray-900">
-              Order Summary
-            </h2>
-            <div className="space-y-2 sm:space-y-3 border-b border-gray-200 pb-3 sm:pb-4">
-              <div className="flex justify-between text-xs sm:text-sm">
-                <span className="text-gray-600">
-                  Items ({priceBreakdown.itemCount}):
-                </span>
-                <span className="text-gray-900">
-                  ${priceBreakdown.itemsTotal.toFixed(2)}
+          {/* Order Summary */}
+          <div className="lg:col-span-1">
+            <div className="sticky top-24 bg-gray-50 p-6 sm:p-8">
+              <h2 className="mb-6 text-xl font-black uppercase tracking-wide text-black">
+                Summary
+              </h2>
+              <div className="space-y-4 border-b border-gray-200 pb-6 mb-6">
+                <div className="flex justify-between text-sm">
+                  <span className="text-gray-600 uppercase tracking-wide font-medium">
+                    {priceBreakdown.itemCount} Items
+                  </span>
+                  <span className="font-bold text-black">
+                    ${priceBreakdown.itemsTotal.toFixed(2)}
+                  </span>
+                </div>
+                <div className="flex justify-between text-sm">
+                  <span className="text-gray-600 uppercase tracking-wide font-medium">
+                    Delivery
+                  </span>
+                  <span className="font-bold text-black">
+                    ${priceBreakdown.shippingCost.toFixed(2)}
+                  </span>
+                </div>
+                <div className="flex justify-between text-sm">
+                  <span className="text-gray-600 uppercase tracking-wide font-medium">
+                    Tax
+                  </span>
+                  <span className="font-bold text-black">
+                    ${priceBreakdown.tax.toFixed(2)}
+                  </span>
+                </div>
+              </div>
+
+              <div className="flex justify-between text-xl font-black uppercase tracking-wide mb-8">
+                <span className="text-black">Total</span>
+                <span className="text-black">
+                  ${priceBreakdown.orderTotal.toFixed(2)}
                 </span>
               </div>
-              <div className="flex justify-between text-xs sm:text-sm">
-                <span className="text-gray-600">
-                  Shipping:
-                </span>
-                <span className="text-gray-900">
-                  ${priceBreakdown.shippingCost.toFixed(2)}
-                </span>
-              </div>
-              <div className="flex justify-between text-xs sm:text-sm">
-                <span className="text-gray-600">
-                  Before tax:
-                </span>
-                <span className="text-gray-900">
-                  ${priceBreakdown.subtotal.toFixed(2)}
-                </span>
-              </div>
-              <div className="flex justify-between text-xs sm:text-sm">
-                <span className="text-gray-600">
-                  Tax (10%):
-                </span>
-                <span className="text-gray-900">
-                  ${priceBreakdown.tax.toFixed(2)}
-                </span>
-              </div>
+
+              <button
+                onClick={handlePlaceOrder}
+                disabled={isPlacingOrder || items.length === 0 || !currentShipping}
+                className="w-full bg-black hover:bg-gray-900 px-6 py-4 text-sm font-bold text-white uppercase tracking-wider transition-all disabled:opacity-50 disabled:cursor-not-allowed hover:shadow-xl"
+              >
+                {isPlacingOrder ? "Processing..." : "Place Order ->"}
+              </button>
             </div>
-            <div className="mt-4 flex justify-between text-base sm:text-lg font-semibold">
-              <span className="text-[#B12704]">Total:</span>
-              <span className="text-[#B12704]">
-                ${priceBreakdown.orderTotal.toFixed(2)}
-              </span>
-            </div>
-            <button
-              onClick={handlePlaceOrder}
-              disabled={isPlacingOrder || items.length === 0 || !currentShipping}
-              className="mt-4 sm:mt-6 w-full rounded-md bg-[#FFD814] hover:bg-[#F7CA00] border border-[#FCD200] px-4 py-2.5 sm:py-3 text-sm font-medium text-black transition-colors disabled:cursor-not-allowed disabled:opacity-50 disabled:bg-gray-300 disabled:border-gray-300"
-            >
-              {isPlacingOrder ? "Placing order..." : "Place order"}
-            </button>
           </div>
         </div>
-      </div>
       </div>
     </main>
   );
 }
-

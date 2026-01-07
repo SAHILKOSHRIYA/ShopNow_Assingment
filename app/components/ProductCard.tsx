@@ -61,73 +61,77 @@ export function ProductCard({ product }: Props) {
   const isOutOfStock = product.availableStock !== undefined && product.availableStock === 0;
 
   return (
-    <div className="flex flex-col bg-white border border-gray-200 rounded-sm p-2 h-full hover:shadow-md transition-shadow">
-      <Link href={`/product/${product.id}`} className="relative aspect-[4/3] w-full overflow-hidden bg-white mb-2">
+    <div className="group flex flex-col bg-white h-full transition-transform hover:-translate-y-1 duration-300">
+      <Link href={`/product/${product.id}`} className="relative aspect-[4/3] w-full overflow-hidden bg-gray-50 mb-4">
         <Image
           src={imageUrl}
           alt={productName}
           fill
           sizes="(min-width: 1280px) 25vw, (min-width: 1024px) 33vw, (min-width: 640px) 50vw, 100vw"
-          className="object-contain p-2"
+          className="object-contain p-4 mix-blend-multiply transition-transform group-hover:scale-105"
         />
         {isOutOfStock && (
-          <div className="absolute inset-0 flex items-center justify-center bg-black/40">
-            <span className="rounded bg-red-600 px-2 py-1 text-xs font-medium text-white">
+          <div className="absolute top-2 left-2">
+            <span className="bg-[#E6E6FA] text-black px-3 py-1 text-xs font-bold uppercase tracking-wider">
               Out of Stock
             </span>
           </div>
         )}
       </Link>
-      <div className="flex flex-1 flex-col gap-1">
+      <div className="flex flex-1 flex-col px-2 pb-4">
+        {/* Rating and Reviews */}
+        <div className="mb-2">
+          <RatingStars rating={rating} reviewCount={reviewCount} size="sm" />
+        </div>
+
         <Link
           href={`/product/${product.id}`}
-          className="line-clamp-2 text-xs sm:text-sm text-[#007185] hover:text-[#C7511F] hover:underline cursor-pointer leading-tight"
+          className="text-sm font-medium text-black hover:text-gray-600 mb-2 line-clamp-2 uppercase tracking-wide cursor-pointer"
         >
           {productName}
         </Link>
 
-        {/* Rating and Reviews */}
-        <RatingStars rating={rating} reviewCount={reviewCount} size="sm" />
-
         {/* Price */}
-        <div className="flex items-baseline gap-1">
-          <span className="text-base sm:text-lg font-bold text-[#B12704]">
+        <div className="mb-4">
+          <span className="text-lg font-bold text-black">
             ${product.price.toFixed(2)}
           </span>
         </div>
 
         {/* Add to Cart / Remove from Cart Button */}
-        {isInCart ? (
-          <button
-            onClick={handleRemove}
-            disabled={isOutOfStock}
-            className="mt-auto w-full rounded-md bg-red-500 hover:bg-red-600 border border-red-600 text-xs sm:text-sm font-medium text-white py-1.5 sm:py-2 px-2 sm:px-4 transition-colors disabled:cursor-not-allowed disabled:opacity-50 disabled:bg-gray-300 disabled:border-gray-300"
-            aria-label="Remove from cart"
-          >
-            Remove from Cart
-          </button>
-        ) : (
-          <button
-            onClick={handleAdd}
-            disabled={isOutOfStock || isAdding}
-            className="mt-auto w-full rounded-md bg-[#FFD814] hover:bg-[#F7CA00] border border-[#FCD200] text-xs sm:text-sm font-medium text-black py-1.5 sm:py-2 px-2 sm:px-4 transition-colors disabled:cursor-not-allowed disabled:opacity-50 disabled:bg-gray-300 disabled:border-gray-300"
-            aria-label={isOutOfStock ? "Out of stock" : isAdding ? "Adding to cart" : "Add to cart"}
-          >
-            {isAdding ? (
-              <span className="flex items-center justify-center gap-1">
-                <svg className="h-3 w-3 sm:h-4 sm:w-4 animate-spin" fill="none" viewBox="0 0 24 24">
-                  <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
-                  <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z" />
-                </svg>
-                Adding...
-              </span>
-            ) : isOutOfStock ? (
-              "Out of Stock"
-            ) : (
-              "Add to Cart"
-            )}
-          </button>
-        )}
+        <div className="mt-auto">
+          {isInCart ? (
+            <button
+              onClick={handleRemove}
+              disabled={isOutOfStock}
+              className="w-full bg-[#E6E6FA] hover:bg-[#D8BFD8] text-black text-sm font-bold uppercase tracking-wider py-3 px-4 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+              aria-label="Remove from cart"
+            >
+              Remove from Cart
+            </button>
+          ) : (
+            <button
+              onClick={handleAdd}
+              disabled={isOutOfStock || isAdding}
+              className="w-full bg-black hover:bg-gray-800 text-white text-sm font-bold uppercase tracking-wider py-3 px-4 transition-colors disabled:opacity-50 disabled:cursor-not-allowed group-hover:shadow-lg"
+              aria-label={isOutOfStock ? "Out of stock" : isAdding ? "Adding to cart" : "Add to cart"}
+            >
+              {isAdding ? (
+                <span className="flex items-center justify-center gap-2">
+                  <svg className="h-4 w-4 animate-spin" fill="none" viewBox="0 0 24 24">
+                    <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
+                    <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z" />
+                  </svg>
+                  Processing
+                </span>
+              ) : isOutOfStock ? (
+                "Out of Stock"
+              ) : (
+                "Add to Cart"
+              )}
+            </button>
+          )}
+        </div>
       </div>
     </div>
   );

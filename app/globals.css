@@ -8,8 +8,13 @@
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+  --color-font-sans: var(--font-geist-sans);
+  --color-font-mono: var(--font-geist-mono);
+  --color-lavender-100: #E6E6FA;
+  --color-lavender-200: #D8BFD8;
+  --color-lavender-300: #C3B1E1;
+  --color-lavender-500: #967BB6;
+  --color-lavender-600: #8A66D6;
 }
 
 body {

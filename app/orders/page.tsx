@@ -68,14 +68,14 @@ function OrdersContent() {
 
   if (orders.length === 0) {
     return (
-      <main className="bg-[#EAEDED] min-h-screen w-full overflow-x-hidden">
-        <div className="w-full px-2 sm:px-3 py-2 sm:py-3">
-          <h1 className="text-xl sm:text-2xl font-normal text-gray-900 mb-4 sm:mb-6">Your Orders</h1>
-          <div className="bg-white border border-gray-200 rounded-sm p-6 sm:p-8 text-center">
-            <p className="text-gray-600 mb-4">You haven't placed any orders yet.</p>
+      <main className="bg-white min-h-screen w-full overflow-x-hidden">
+        <div className="w-full max-w-7xl mx-auto px-4 py-8">
+          <h1 className="text-3xl font-black uppercase tracking-tight text-black mb-8">Your Orders</h1>
+          <div className="bg-gray-50 border border-gray-100 p-12 text-center">
+            <p className="text-gray-600 mb-6 font-medium uppercase tracking-wide">You haven&apos;t placed any orders yet.</p>
             <Link
               href="/"
-              className="inline-block rounded-md bg-[#FFD814] hover:bg-[#F7CA00] border border-[#FCD200] px-6 py-2 text-sm font-medium text-black transition-colors"
+              className="inline-block bg-black hover:bg-gray-800 text-white text-sm font-bold uppercase tracking-widest px-8 py-4 transition-colors"
             >
               Start Shopping
             </Link>
@@ -86,21 +86,18 @@ function OrdersContent() {
   }
 
   return (
-    <main className="bg-[#EAEDED] min-h-screen w-full overflow-x-hidden">
-      <div className="w-full px-2 sm:px-3 py-2 sm:py-3">
-        <h1 className="text-xl sm:text-2xl font-normal text-gray-900 mb-4 sm:mb-6">Your Orders</h1>
+    <main className="bg-white min-h-screen w-full overflow-x-hidden">
+      <div className="w-full max-w-7xl mx-auto px-4 py-8">
+        <h1 className="text-3xl font-black uppercase tracking-tight text-black mb-8">Your Orders</h1>
 
         {showSuccess && (
-          <div className="mb-4 bg-green-50 border border-green-200 rounded-sm p-4 flex items-center justify-between">
+          <div className="mb-8 bg-[#E6E6FA] border border-gray-100 p-4 flex items-center justify-between">
             <div className="flex items-center gap-3">
-              <svg className="w-5 h-5 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
-              </svg>
-              <p className="text-sm text-green-800 font-medium">Order placed successfully!</p>
+              <span className="text-black font-bold uppercase tracking-wider text-sm">Order placed successfully!</span>
             </div>
             <button
               onClick={() => setShowSuccess(false)}
-              className="text-green-600 hover:text-green-800"
+              className="text-black hover:text-gray-600"
             >
               <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
@@ -110,37 +107,38 @@ function OrdersContent() {
         )}
 
         {orders.map((order) => (
-          <div key={order.orderId} className="bg-white border border-gray-200 rounded-sm mb-4">
+          <div key={order.orderId} className="bg-white border-t border-gray-200 py-8 mb-8">
             {/* Order Summary */}
-            <div className="bg-gray-50 border-b border-gray-200 px-3 sm:px-4 py-2 sm:py-3">
-              <div className="flex flex-col sm:flex-row sm:flex-wrap sm:items-center sm:justify-between gap-2 sm:gap-4 text-xs sm:text-sm">
+            <div className="flex flex-col md:flex-row md:items-center justify-between gap-6 mb-8">
+              <div className="flex flex-wrap gap-8 text-sm">
                 <div>
-                  <span className="text-gray-600">Placed: </span>
-                  <span className="font-medium text-gray-900">{formatDate(order.orderDate)}</span>
+                  <span className="block text-gray-500 uppercase tracking-widest text-xs mb-1">Placed</span>
+                  <span className="font-bold text-black uppercase tracking-wide">{formatDate(order.orderDate)}</span>
                 </div>
                 <div>
-                  <span className="text-gray-600">Total: </span>
-                  <span className="font-medium text-gray-900">
+                  <span className="block text-gray-500 uppercase tracking-widest text-xs mb-1">Total</span>
+                  <span className="font-bold text-black">
                     ${order.pricing.orderTotal.toFixed(2)}
                   </span>
                 </div>
                 <div>
-                  <span className="text-gray-600">ID: </span>
-                  <span className="font-medium text-gray-900">{order.orderId}</span>
+                  <span className="block text-gray-500 uppercase tracking-widest text-xs mb-1">Order #</span>
+                  <span className="font-bold text-black uppercase tracking-wide">{order.orderId.slice(0, 8)}...</span>
                 </div>
-                {order.status === "preparing" && (
-                  <button
-                    onClick={() => handleCancelOrder(order.orderId)}
-                    className="text-red-600 hover:text-red-700 text-xs sm:text-sm font-medium"
-                  >
-                    Cancel Order
-                  </button>
-                )}
               </div>
+
+              {order.status === "preparing" && (
+                <button
+                  onClick={() => handleCancelOrder(order.orderId)}
+                  className="text-black hover:text-red-600 text-xs font-bold uppercase tracking-wider underline decoration-2 underline-offset-4"
+                >
+                  Cancel Order
+                </button>
+              )}
             </div>
 
             {/* Order Items */}
-            <div className="p-3 sm:p-4">
+            <div className="space-y-8">
               {order.items.map((item, index) => {
                 const itemId = item.productId || item.id!;
                 const itemName = item.name || item.title!;
@@ -150,50 +148,38 @@ function OrdersContent() {
                 return (
                   <div
                     key={`${itemId}-${index}`}
-                    className={`flex gap-3 sm:gap-4 ${index < order.items.length - 1 ? "pb-3 sm:pb-4 mb-3 sm:mb-4 border-b border-gray-200" : ""}`}
+                    className="flex gap-6"
                   >
-                    <div className="relative h-20 w-20 sm:h-24 sm:w-24 flex-shrink-0 overflow-hidden bg-white border border-gray-200 rounded-sm">
+                    <div className="relative h-24 w-24 flex-shrink-0 overflow-hidden bg-gray-50">
                       <Image
                         src={itemImage}
                         alt={itemName}
                         fill
                         sizes="96px"
-                        className="object-contain p-1 sm:p-2"
+                        className="object-contain p-2 mix-blend-multiply"
                       />
                     </div>
-                    <div className="flex-1 min-w-0">
-                      <h3 className="font-medium text-gray-900 text-xs sm:text-sm mb-1 line-clamp-2">{itemName}</h3>
-                      <p className="text-xs sm:text-sm text-gray-600 mb-1 sm:mb-2">
-                        Arriving: {arrivalDate}
-                      </p>
-                      <p className="text-xs sm:text-sm text-gray-600 mb-2 sm:mb-3">Qty: {item.quantity}</p>
-                      <div className="flex flex-wrap gap-2 sm:gap-3">
+                    <div className="flex-1 min-w-0 flex flex-col justify-between">
+                      <div>
+                        <h3 className="font-bold text-black text-sm sm:text-base uppercase tracking-wide mb-2 max-w-xl">
+                          {itemName}
+                        </h3>
+                        <p className="text-sm font-medium text-black">
+                          Arriving: <span className="text-gray-600">{arrivalDate}</span>
+                        </p>
+                      </div>
+
+                      <div className="mt-4 flex flex-wrap gap-4">
                         <Link
                           href={`/orders/${order.orderId}?itemIndex=${index}`}
-                          className="inline-flex items-center justify-center rounded-md border border-gray-300 bg-white hover:bg-gray-50 px-2.5 sm:px-3 py-1 sm:py-1.5 text-xs sm:text-sm font-medium text-gray-700 transition-colors"
+                          className="inline-flex items-center justify-center border border-black bg-white hover:bg-black hover:text-white px-4 py-2 text-xs font-bold uppercase tracking-widest transition-colors"
                         >
-                          <svg className="w-3 h-3 sm:w-4 sm:h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
-                          </svg>
-                          Track
+                          Track Package
                         </Link>
                         <button
                           onClick={() => handleBuyAgain([item])}
-                          className="inline-flex items-center justify-center rounded-md bg-[#FFD814] hover:bg-[#F7CA00] border border-[#FCD200] px-2.5 sm:px-3 py-1 sm:py-1.5 text-xs sm:text-sm font-medium text-black transition-colors"
+                          className="inline-flex items-center justify-center bg-black text-white hover:bg-gray-800 px-4 py-2 text-xs font-bold uppercase tracking-widest transition-colors"
                         >
-                          <svg
-                            className="w-3 h-3 sm:w-4 sm:h-4 mr-1"
-                            fill="none"
-                            stroke="currentColor"
-                            viewBox="0 0 24 24"
-                          >
-                            <path
-                              strokeLinecap="round"
-                              strokeLinejoin="round"
-                              strokeWidth={2}
-                              d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"
-                            />
-                          </svg>
                           Buy Again
                         </button>
                       </div>
@@ -201,17 +187,6 @@ function OrdersContent() {
                   </div>
                 );
               })}
-              <div className="mt-3 sm:mt-4 pt-3 sm:pt-4 border-t border-gray-200">
-                <button
-                  onClick={() => handleBuyAgain(order.items)}
-                  className="inline-flex items-center justify-center rounded-md border border-gray-300 bg-white hover:bg-gray-50 px-4 py-2 text-sm font-medium text-gray-700 transition-colors"
-                >
-                  <svg className="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
-                  </svg>
-                  Buy All Again
-                </button>
-              </div>
             </div>
           </div>
         ))}
@@ -223,10 +198,10 @@ function OrdersContent() {
 export default function OrdersPage() {
   return (
     <Suspense fallback={
-      <main className="bg-[#EAEDED] min-h-screen">
-        <div className="mx-auto max-w-6xl px-3 sm:px-4 py-3 sm:py-4 sm:px-6 lg:px-8">
-          <h1 className="text-xl sm:text-2xl font-normal text-gray-900 mb-4 sm:mb-6">Your Orders</h1>
-          <div className="text-center text-gray-600">Loading...</div>
+      <main className="bg-white min-h-screen">
+        <div className="mx-auto max-w-7xl px-4 py-8">
+          <h1 className="text-3xl font-black uppercase tracking-tight text-black mb-8">Your Orders</h1>
+          <div className="text-center text-gray-500 font-medium uppercase tracking-wider">Loading...</div>
         </div>
       </main>
     }>
@@ -234,5 +209,3 @@ export default function OrdersPage() {
     </Suspense>
   );
 }
-
-
