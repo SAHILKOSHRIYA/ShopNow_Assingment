@@ -3,13 +3,18 @@
 import { useSelector } from "react-redux";
 import { useSearchParams } from "next/navigation";
 import Link from "next/link";
-import { Suspense } from "react";
+import { Suspense, useEffect, useState } from "react";
 import type { RootState } from "@/lib/store";
 
 function OrderSuccessContent() {
   const searchParams = useSearchParams();
   const orders = useSelector((state: RootState) => state.orders.orders);
   const latestOrder = orders[0]; // Most recent order
+  const [mounted, setMounted] = useState(false);
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
 
   return (
     <main className="bg-white min-h-screen flex items-center justify-center px-4 py-10">
@@ -36,7 +41,7 @@ function OrderSuccessContent() {
           <p className="text-base sm:text-lg font-medium text-gray-600 mb-2">
             Thank you for your purchase. Your order has been confirmed.
           </p>
-          {latestOrder && (
+          {mounted && latestOrder && (
             <p className="text-sm font-bold text-black uppercase tracking-wide">
               Order ID: {latestOrder.orderId}
             </p>

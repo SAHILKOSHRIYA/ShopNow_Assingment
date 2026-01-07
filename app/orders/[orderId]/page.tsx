@@ -56,10 +56,8 @@ function OrderTrackingContent({ orderId }: { orderId: string }) {
 
   const itemName = item.name || item.title!;
   const itemImage = item.imageUrl || item.image!;
-  // deliveryOption.date is already a formatted string like "Wednesday, January 14"
   const formattedDate = order.deliveryOption.date;
 
-  // Determine progress based on status
   const getProgress = () => {
     switch (order.status) {
       case "preparing":
@@ -76,51 +74,51 @@ function OrderTrackingContent({ orderId }: { orderId: string }) {
   const progress = getProgress();
 
   return (
-    <main className="bg-[#EAEDED] min-h-screen">
-      <div className="mx-auto max-w-4xl px-4 py-4 sm:px-6 lg:px-8">
+    <main className="bg-white min-h-screen">
+      <div className="mx-auto max-w-2xl px-4 py-4 sm:px-6">
         <Link
           href="/orders"
-          className="inline-block text-[#007185] hover:text-[#C7511F] hover:underline text-sm mb-4"
+          className="inline-block text-black hover:text-gray-600 hover:underline text-xs font-bold uppercase tracking-widest mb-4"
         >
           View all orders
         </Link>
 
-        <div className="bg-white border border-gray-200 rounded-sm p-6">
-          <h1 className="text-xl sm:text-2xl font-normal text-gray-900 mb-3 sm:mb-4">
+        <div className="bg-white border border-gray-100 rounded-sm p-4 sm:p-6 shadow-sm">
+          <h1 className="text-lg sm:text-xl font-bold text-black uppercase tracking-tight mb-2">
             Arriving on {formattedDate}
           </h1>
 
-          <div className="mb-4 sm:mb-6">
-            <h2 className="text-base sm:text-lg font-medium text-gray-900 mb-1 sm:mb-2">{itemName}</h2>
-            <p className="text-sm text-gray-600">Quantity: {item.quantity}</p>
+          <div className="mb-4">
+            <h2 className="text-sm font-bold text-black uppercase tracking-wide mb-1 truncate">{itemName}</h2>
+            <p className="text-xs text-gray-600 font-medium">Quantity: {item.quantity}</p>
           </div>
 
-          <div className="flex justify-center mb-8">
-            <div className="relative w-48 h-48">
+          <div className="flex justify-center mb-6">
+            <div className="relative w-32 h-32 border border-gray-100 rounded-lg bg-gray-50 flex items-center justify-center">
               <Image
                 src={itemImage}
                 alt={itemName}
                 fill
-                sizes="192px"
-                className="object-contain"
+                sizes="128px"
+                className="object-contain p-4 mix-blend-multiply"
               />
             </div>
           </div>
 
           {/* Progress Bar */}
           <div className="mb-4">
-            <div className="flex justify-between mb-2 text-xs sm:text-sm text-gray-600">
-              <span className={order.status === "preparing" ? "font-medium text-gray-900" : ""}>
+            <div className="flex justify-between mb-2 text-[10px] sm:text-xs font-bold uppercase tracking-wider text-gray-400">
+              <span className={order.status === "preparing" ? "text-black" : ""}>
                 Preparing
               </span>
-              <span className={order.status === "shipped" ? "font-medium text-gray-900" : ""}>
+              <span className={order.status === "shipped" ? "text-black" : ""}>
                 Shipped
               </span>
-              <span className={order.status === "delivered" ? "font-medium text-gray-900" : ""}>
+              <span className={order.status === "delivered" ? "text-black" : ""}>
                 Delivered
               </span>
             </div>
-            <div className="relative h-2 bg-gray-200 rounded-full overflow-hidden">
+            <div className="relative h-1.5 bg-gray-100 rounded-full overflow-hidden">
               <div
                 className="absolute top-0 left-0 h-full bg-green-600 transition-all duration-300"
                 style={{ width: `${progress}%` }}
@@ -128,13 +126,13 @@ function OrderTrackingContent({ orderId }: { orderId: string }) {
             </div>
           </div>
 
-          <div className="mt-4 sm:mt-6 pt-4 sm:pt-6 border-t border-gray-200">
-            <div className="text-xs sm:text-sm text-gray-600">
-              <p className="mb-2">
-                <span className="font-medium">Order ID:</span> {order.orderId}
+          <div className="mt-4 pt-4 border-t border-gray-100">
+            <div className="text-[10px] sm:text-xs text-gray-500 font-medium space-y-1">
+              <p>
+                <span className="font-bold text-black uppercase tracking-wide">Order ID:</span> {order.orderId}
               </p>
               <p>
-                <span className="font-medium">Expected delivery:</span> {formattedDate}
+                <span className="font-bold text-black uppercase tracking-wide">Expected delivery:</span> {formattedDate}
               </p>
             </div>
           </div>
@@ -146,7 +144,7 @@ function OrderTrackingContent({ orderId }: { orderId: string }) {
 
 export default function OrderTrackingPage({ params }: Props) {
   const { orderId } = use(params);
-  
+
   return (
     <Suspense fallback={
       <main className="bg-[#EAEDED] min-h-screen w-full overflow-x-hidden">
@@ -161,4 +159,3 @@ export default function OrderTrackingPage({ params }: Props) {
     </Suspense>
   );
 }
-
